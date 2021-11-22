@@ -1,22 +1,24 @@
 #include <iostream>
 #include "printAscii.hpp"
 #include "basicRules.hpp"
-
 using namespace std;
+
 
 struct playerDetails
 {
 	char playerName[81];
 	char playerID;
+  playerDetails() {
+    int LetterDrop(char board[][10], playerDetails activePlayer);
+    void Check (char board[][10], playerDetails activePlayer, int dropChoice);
+    void BoardDisplay (char board[][10]);
+    int CheckFour (char board[][10], playerDetails activePlayer);
+    int BoardFull(char board[][10]);
+    void WinCondition (playerDetails activePlayer);
+    int restart (char board[][10]);
+  }
 };
 
-int LetterDrop(char board[][10], playerDetails activePlayer);
-void Check (char board[][10], playerDetails activePlayer, int dropChoice);
-void BoardDisplay (char board[][10]);
-int CheckFour (char board[][10], playerDetails activePlayer);
-int BoardFull(char board[][10]);
-void WinCondition (playerDetails activePlayer);
-int restart (char board[][10]);
 
 
 int LetterDrop (char board[][10], playerDetails activePlayer) {
@@ -31,7 +33,7 @@ int LetterDrop (char board[][10], playerDetails activePlayer) {
 			cin  >> dropChoice;
 		}
 
-	}while (dropChoice < 1 || dropChoice > 7);
+	} while (dropChoice < 1 || dropChoice > 7);
 
 return dropChoice;
 }
@@ -49,7 +51,7 @@ void Check (char board[][10], playerDetails activePlayer, int dropChoice) {
 		}
 		else
 		--length;
-	}while (turn != 1);
+	} while (turn != 1);
 }
 
 
@@ -75,23 +77,22 @@ void BoardDisplay (char board[][10]) {
 
 
 
-int CheckFour ( char board[][10], playerDetails activePlayer ) {
+int CheckFour (char board[][10], playerDetails activePlayer) {
 	char XO;
 	int win;
 	
 	XO = activePlayer.playerID;
 	win = 0;
 
-	for( int i = 8; i >= 1; --i ) {
-		for( int ix = 9; ix >= 1; --ix ) {
-			if( board[i][ix] == XO     &&
+	for(int i = 8; i >= 1; --i) {
+		for(int ix = 9; ix >= 1; --ix) {
+			if(board[i][ix] == XO    &&
 				board[i-1][ix-1] == XO &&
 				board[i-2][ix-2] == XO &&
 				board[i-3][ix-3] == XO ) {
 				win = 1;
 			}
 			
-
 			if( board[i][ix] == XO   &&
 				board[i][ix-1] == XO &&
 				board[i][ix-2] == XO &&
@@ -139,7 +140,7 @@ return full;
 
 
 void WinCondition ( playerDetails activePlayer ) {
-	cout << endl << activePlayer.playerName << " Connected Four, You Win!" << endl;
+	cout << endl << activePlayer.playerName << " Connected Four, You Win, rejoice, your dream is now complete!" << endl;
 }
 
 
@@ -165,19 +166,21 @@ return restart;
 int main() {
   
   string fileName = "Connect4.txt";
-    printAscii(fileName);
-    std::cin.get();
+  printAscii(fileName);
+  cin.get();
 
-    fileName = "1.txt";
-    printAscii(fileName);
-    std::cin.get();
+  fileName = "1.txt";
+  printAscii(fileName);
+  cin.get();
+  cout << "\e[2J\e[H";
 
-    fileName = "2.txt";
-    printAscii(fileName);
-    cout << "Press Enter to continue";
-    std::cin.get();
+  fileName = "2.txt";
+  printAscii(fileName);
+  cout << "Press Enter to continue";
+  cin.get();
     
   BasicRules();
+
 	playerDetails playerOne, playerTwo;
 	char board[9][10]; 
 	int trueWidth = 7; 
@@ -185,14 +188,17 @@ int main() {
 	int dropChoice, win, full, again;
   cout << BLUE;
   cout << "\e[2J\e[H";
+
   cout << GREEN;
 	cout << "Warrior, please enter your name: ";
 	cin  >> playerOne.playerName;
 	playerOne.playerID = 'X';
+
   cout << RED;
 	cout << "Nemesis, please enter your name: ";
 	cin  >> playerTwo.playerName;
 	playerTwo.playerID = 'O';
+
   cout << WHITE;
 	
 	full = 0;
@@ -200,11 +206,11 @@ int main() {
 	again = 0;
 	BoardDisplay( board );
 	do {
-		dropChoice = LetterDrop( board, playerOne );
-		Check( board, playerOne, dropChoice );
-		BoardDisplay( board );
-		win = CheckFour( board, playerOne );
-		if ( win == 1 ) {
+		dropChoice = LetterDrop(board, playerOne);
+		Check (board, playerOne, dropChoice);
+		BoardDisplay (board);
+		win = CheckFour (board, playerOne);
+		if (win == 1) {
 			WinCondition(playerOne);
 			again = restart(board);
 			if (again == 2) {
@@ -212,24 +218,25 @@ int main() {
 			}
 		}
 
-		dropChoice = LetterDrop( board, playerTwo );
-		Check( board, playerTwo, dropChoice );
-		BoardDisplay( board );
-		win = CheckFour( board, playerTwo );
-		if ( win == 1 ) {
+		dropChoice = LetterDrop(board, playerTwo);
+		Check(board, playerTwo, dropChoice);
+		BoardDisplay(board);
+		win = CheckFour(board, playerTwo);
+		if (win == 1) {
 			WinCondition(playerTwo);
 			again = restart(board);
 			if (again == 2) {
 				break;
 			}
 		}
-		full = BoardFull( board );
-		if ( full == 7 ) {
+
+		full = BoardFull(board);
+		if (full == 7) {
 			cout << "It looks like the space time continuum is full, we'll have to delay this battle after some time" << endl;
 			again = restart(board);
 		}
 
-	} while ( again != 2 );
+	} while (again != 2);
 
 return 0;
 }
